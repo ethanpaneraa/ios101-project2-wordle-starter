@@ -62,7 +62,9 @@ class BoardController: NSObject,
   // Checkpoint: Correctly implementing this should allow you to change the number of letters in the goal word!
   private func applyNumLettersSettings(with settings: [String: Any]) {
     // START YOUR CODE HERE
-    // ...
+      if let numLetters = settings[kNumLettersKey] as? Int {
+          numItemsPerRow = numLetters
+      }
     // END YOUR CODE HERE
   }
   
@@ -74,7 +76,9 @@ class BoardController: NSObject,
   // Checkpoint: Correctly implementing this should allow you to change the number of rows in the board!
   private func applyNumGuessesSettings(with settings: [String: Any]) {
     // START YOUR CODE HERE
-    // ...
+      if let numGuesses = settings[kNumGuessesKey] as? Int {
+          numRows = numGuesses
+      }
     // END YOUR CODE HERE
   }
   
@@ -85,11 +89,21 @@ class BoardController: NSObject,
   //    Use the `WordTheme(rawValue:)` initializer to pass-in the string from the dictionary to get the correct type
   // Checkpoint: Correctly implementing this should allow you to change the theme of the goal word! Use breakpoints or print statements
   // to check the before/after value of goalWord and see if it changes to the correct theme
-  private func applyThemeSettings(with settings: [String: Any]) {
-    // START YOUR CODE HERE
-    // ...
-    // END YOUR CODE HERE
-  }
+    private func applyThemeSettings(with settings: [String: Any]) {
+        print(goalWord)
+        if let themeSetting = settings[kWordThemeKey] as? String,
+           let theme = WordTheme(rawValue: themeSetting) { // Safely unwrap the optional
+            goalWord = WordGenerator.generateGoalWord(with: theme)
+        } else {
+            // Handle the case where the themeSetting is not a valid WordTheme
+            // This could be either setting a default theme or logging an error
+            // For example, setting a default theme:
+            let defaultTheme = WordTheme.normal // Assume 'standard' is a valid WordTheme value
+            goalWord = WordGenerator.generateGoalWord(with: defaultTheme)
+        }
+        print(goalWord)
+    }
+
   
   // Exercise 4: Implement applyIsAlienWordleSettings to change the goal word after each guess
   // Tip 1: There is a constant `kIsAlienWordleKey` in Constants.swift that you can use as the key to grab the value in the dictionary
@@ -97,7 +111,11 @@ class BoardController: NSObject,
   // Checkpoint: Correctly implementing this function should change the goal word each time the user inputs an entire row of letters
   private func applyIsAlienWordleSettings(with settings: [String: Any]) {
     // START YOUR CODE HERE
-    // ...
+      print(goalWord)
+      if let isAlienWord = settings[kIsAlienWordleKey] as? Bool {
+          isAlienWordle = isAlienWord 
+      }
     // START YOUR CODE HERE
+      print(goalWord)a
   }
 }
